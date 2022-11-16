@@ -1,0 +1,36 @@
+import express from "express";
+import fs from "fs";
+import path, { dirname } from "path";
+import https from "https";
+import bodyParser from "body-parser";
+//process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "html");
+app.engine("html", require("ejs").renderFile);
+app.use(express.static(__dirname + "/static"));
+
+const externalURL = process.env.RENDER_EXTERNAL_URL;
+
+const port =
+  externalURL && process.env.PORT ? parseInt(process.env.PORT) : 4080;
+
+app.get("/", function (req, res) {
+  res.render("index");
+});
+
+https
+  .createServer(
+    {
+      key: fs.readFileSync("server.key"),
+      cert: fs.readFileSync("server.cert"),
+    },
+    app
+  )
+  .listen(port, function () {
+    console.log(`Server running at https://localhost:${port}/`);
+  });
