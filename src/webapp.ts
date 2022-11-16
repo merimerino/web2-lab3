@@ -23,14 +23,23 @@ app.get("/", function (req, res) {
   res.render("index");
 });
 
-https
-  .createServer(
-    {
-      key: fs.readFileSync("server.key"),
-      cert: fs.readFileSync("server.cert"),
-    },
-    app
-  )
-  .listen(port, function () {
-    console.log(`Server running at https://localhost:${port}/`);
+if (externalURL) {
+  const hostname = "127.0.0.1";
+  app.listen(port, hostname, function () {
+    console.log(
+      `Server running at https://${hostname}:${port}/ and from outside on ${externalURL}`
+    );
   });
+} else {
+  https
+    .createServer(
+      {
+        key: fs.readFileSync("server.key"),
+        cert: fs.readFileSync("server.cert"),
+      },
+      app
+    )
+    .listen(port, function () {
+      console.log(`Server running at https://localhost:${port}/`);
+    });
+}
