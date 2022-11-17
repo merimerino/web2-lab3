@@ -15,7 +15,10 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "html");
 app.engine("html", require("ejs").renderFile);
 app.use(express.static(__dirname + "/public"));
-
+app.use((request, response, next) => {
+  response.set("X-Content-Type-Options", "nosniff");
+  next();
+});
 const externalURL = process.env.RENDER_EXTERNAL_URL;
 
 const port =
