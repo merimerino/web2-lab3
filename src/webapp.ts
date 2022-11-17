@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "html");
 app.engine("html", require("ejs").renderFile);
-app.use(express.static(__dirname + "/static"));
+app.use("/public", express.static(path.join(__dirname, "public")));
 
 const externalURL = process.env.RENDER_EXTERNAL_URL;
 
