@@ -3,9 +3,11 @@ import fs from "fs";
 import path, { dirname } from "path";
 import https from "https";
 import bodyParser from "body-parser";
+import dotenv from "dotenv";
 //process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 const app = express();
+dotenv.config();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
